@@ -1,3 +1,4 @@
+import { User, AuthProvider } from './auth.types';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Injectable } from '@angular/core';
 import { auth } from 'firebase/app';
@@ -8,11 +9,15 @@ import { auth } from 'firebase/app';
 export class AuthService {
   constructor(private afauth: AngularFireAuth) {}
 
-  private signInWithEmailAndPassword({ email, password }): Promise<auth.UserCredential> {
+  private signInWithEmailAndPassword({ email, password }: User): Promise<auth.UserCredential> {
     return this.afauth.auth.signInWithEmailAndPassword(email, password);
   }
 
-  private signUpWithEmailAndPassword({ email, password, name }): Promise<auth.UserCredential> {
+  private signUpWithEmailAndPassword({
+    email,
+    password,
+    name
+  }: User): Promise<auth.UserCredential> {
     return this.afauth.auth
       .createUserWithEmailAndPassword(email, password)
       .then(credentials =>
@@ -22,16 +27,14 @@ export class AuthService {
       );
   }
 
-  private signInWithPoupUp(provider: string): Promise<auth.UserCredential> {
+  private signInWithPoupUp(provider: AuthProvider): Promise<auth.UserCredential> {
     let signInProvider = null;
 
     switch (provider) {
-      case 'facebook':
+      case AuthProvider.Facebook:
         signInProvider = new auth.FacebookAuthProvider();
         break;
     }
-
     return this.afauth.auth.signInWithPopup(signInProvider);
-    }
   }
 }
