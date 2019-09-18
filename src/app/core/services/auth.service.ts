@@ -1,4 +1,4 @@
-import { User, AuthProvider } from './auth.types';
+import { User, AuthProvider, AuthOptions } from './auth.types';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Injectable } from '@angular/core';
 import { auth } from 'firebase/app';
@@ -9,7 +9,17 @@ import { auth } from 'firebase/app';
 export class AuthService {
   constructor(private afauth: AngularFireAuth) {}
 
-  private signInWithEmailAndPassword({ email, password }: User): Promise<auth.UserCredential> {
+  public authenticate({ isSignIn, provider, user }: AuthOptions): Promise<auth.UserCredential> {
+    let operation: Promise<auth.UserCredential>;
+    if (provider !== AuthProvider.Email) {
+      operation = this.signInWithPoupUp(provider);
+    } else {
+      operation = isSignIn ? this.signInWithEmail(user) : this.signInWithEmail(user);
+    }
+    return operation;
+  }
+
+  private signInWithEmail({ email, password }: User): Promise<auth.UserCredential> {
     return this.afauth.auth.signInWithEmailAndPassword(email, password);
   }
 
