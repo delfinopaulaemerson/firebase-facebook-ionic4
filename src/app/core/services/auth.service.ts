@@ -47,4 +47,8 @@ export class AuthService {
     }
     return this.afauth.auth.signInWithPopup(signInProvider);
   }
+
+  logout(): Promise<void> {
+    return this.afauth.auth.signOut();
+  }
 }
