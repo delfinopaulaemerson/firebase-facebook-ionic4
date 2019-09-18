@@ -11,4 +11,14 @@ export class AuthService {
   private signInWithEmailAndPassword({ email, password }): Promise<auth.UserCredential> {
     return this.afauth.auth.signInWithEmailAndPassword(email, password);
   }
+
+  private signUpWithEmailAndPassword({ email, password, name }): Promise<auth.UserCredential> {
+    return this.afauth.auth
+      .createUserWithEmailAndPassword(email, password)
+      .then(credentials =>
+        credentials.user
+          .updateProfile({ displayName: name, photoURL: null })
+          .then(() => credentials)
+      );
+  }
 }
