@@ -1,8 +1,8 @@
-import { User } from './../../../core/services/auth.types';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { AuthProvider } from 'src/app/core/services/auth.types';
+import { OverlayService } from 'src/app/core/services/overlay.service';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +21,11 @@ export class LoginPage implements OnInit {
 
   private nameControl = new FormControl(' ', [Validators.required, Validators.minLength(3)]);
 
-  constructor(private fb: FormBuilder, private service: AuthService) {}
+  constructor(
+    private fb: FormBuilder,
+    private service: AuthService,
+    private overlayService: OverlayService
+  ) {}
 
   ngOnInit() {
     this.createForm();
@@ -57,6 +61,7 @@ export class LoginPage implements OnInit {
       : this.authForm.removeControl('name');
   }
   async onSubmit(provider: AuthProvider): Promise<void> {
+    const loading = await this.overlayService.loading();
     try {
       //verifica se existe  nome para armazenar o usuario
       //no firebase para futura autenticacao
@@ -78,6 +83,11 @@ export class LoginPage implements OnInit {
       console.log('Redirect.........');
     } catch (e) {
       console.log('Authenticated', e);
+      await this.overlayService.toast({
+        message: e.essage
+      });
+    } finally {
+      loading.dismiss();
     }
   }
 }
