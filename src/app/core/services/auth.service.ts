@@ -32,11 +32,7 @@ export class AuthService {
     return this.afauth.auth.signInWithEmailAndPassword(email, password);
   }
 
-  private signUpWithEmailAndPassword({
-    email,
-    password,
-    name
-  }: User): Promise<auth.UserCredential> {
+  public signUpWithEmailAndPassword({ email, password, name }: User): Promise<auth.UserCredential> {
     return this.afauth.auth
       .createUserWithEmailAndPassword(email, password)
       .then(credentials =>

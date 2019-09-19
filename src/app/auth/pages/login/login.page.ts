@@ -1,3 +1,4 @@
+import { User } from './../../../core/services/auth.types';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { AuthService } from 'src/app/core/services/auth.service';
@@ -11,6 +12,7 @@ import { AuthProvider } from 'src/app/core/services/auth.types';
 export class LoginPage implements OnInit {
   authProviders = AuthProvider;
   authForm: FormGroup;
+
   configs = {
     isSignIn: true,
     action: 'Login',
@@ -28,7 +30,8 @@ export class LoginPage implements OnInit {
   createForm() {
     this.authForm = this.fb.group({
       email: [' ', [Validators.required, Validators.email]],
-      password: [' ', [Validators.required, Validators.minLength(6)]]
+      password: [' ', [Validators.required, Validators.minLength(6)]],
+      name: [' ']
     });
   }
 
@@ -55,12 +58,23 @@ export class LoginPage implements OnInit {
   }
   async onSubmit(provider: AuthProvider): Promise<void> {
     try {
-      const credentiais = await this.service.authenticate({
-        isSignIn: this.configs.isSignIn,
-        user: this.authForm.value,
-        provider
-      });
-      console.log('Authenticated', credentiais);
+      //verifica se existe  nome para armazenar o usuario
+      //no firebase para futura autenticacao
+      if (this.name.value !== ' ') {
+        this.service.signUpWithEmailAndPassword({
+          email: this.email.value,
+          name: this.name.value,
+          password: this.password.value
+        });
+        //caso nao autentica com email e senha
+      } else {
+        const credentiais = await this.service.authenticate({
+          isSignIn: this.configs.isSignIn,
+          user: this.authForm.value,
+          provider
+        });
+        console.log('Authenticated', credentiais);
+      }
       console.log('Redirect.........');
     } catch (e) {
       console.log('Authenticated', e);
