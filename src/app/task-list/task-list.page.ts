@@ -1,7 +1,6 @@
 import { NavController } from '@ionic/angular';
-import { OverlayService } from './../core/services/overlay.service';
 import { Component, OnInit } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { TaskService } from '../core/services/task.service';
 
 @Component({
@@ -11,14 +10,10 @@ import { TaskService } from '../core/services/task.service';
 })
 export class TaskListPage implements OnInit {
   tasks$: Observable<any[]>;
-  constructor(private navControler: NavController) {}
+  constructor(private navControler: NavController, private taskservice: TaskService) {}
 
   ngOnInit(): void {
-    this.tasks$ = of([
-      { id: 'mjhkjhd', title: 'Developer Web', done: false },
-      { id: 'pmpmm', title: 'Developer Hibrido', done: false },
-      { id: 'ascsccas', title: 'Developer Nativo', done: false }
-    ]);
+    this.tasks$ = this.taskservice.getAll();
   }
 
   onSave() {

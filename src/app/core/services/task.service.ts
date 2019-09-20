@@ -1,25 +1,31 @@
+import { Task } from 'src/model/task.model';
+
+import {
+  AngularFirestore,
+  AngularFirestoreCollection,
+  DocumentReference
+} from '@angular/fire/firestore';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { Injectable } from '@angular/core';
-import { Task } from 'src/model/task.model';
-import { Firestore } from '../firestore.class';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class TaskService extends Firestore<Task> {
-  constructor(db: AngularFirestore, private authService: AuthService) {
-    super(db);
+export class TaskService {
+  private tasks: Observable<Task[]>;
+  private taskCollection: AngularFirestoreCollection<Task>;
+
+  constructor(private afs: AngularFirestore, private authservice: AuthService) {
+    this.taskCollection = this.afs.collection<Task>('tasks');
   }
 
-  //cada usuario tem sua propria lista
-  private init(): void {
-    this.authService.authState$.subscribe(user => {
-      if (user) {
-        this.setCollection('/users/' + user.uid + '/tasks');
-        return null;
-      }
-      this.setCollection(null);
-    });
+  addTask(task: Task): Promise<DocumentReference> {
+    task.id = this.afs.createId();
+    return this.taskCollection.add(task);
+  }
+
+  getAll(): Observable<Task[]> {
+    return this.taskCollection.valueChanges();
   }
 }
