@@ -1,4 +1,3 @@
-import { User } from './auth.types';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { Injectable } from '@angular/core';
 import { Task } from 'src/model/task.model';

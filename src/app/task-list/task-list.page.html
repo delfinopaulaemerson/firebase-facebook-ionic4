@@ -5,18 +5,19 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-list>
+  <ion-list *ngIf="(tasks$ | async) as tasks">
     <app-task-item
-      *ngFor="let task of (tasks$ | async)"
+      *ngFor="let task of tasks"
       [task]="task"
-    ></app-task-item>
+    >
+    </app-task-item>
   </ion-list>
   <ion-fab
     vertical="bottom"
     horizontal="end"
     slot="fixed"
   >
-    <ion-fab-button>
+    <ion-fab-button (click)="onSave()">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
