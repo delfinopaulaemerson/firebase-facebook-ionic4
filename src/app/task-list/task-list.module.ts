@@ -5,17 +5,17 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { TasksListPage } from './tasks-list.page';
+import { TaskListPage } from './task-list.page';
 
 const routes: Routes = [
   {
-    path: ' ',
-    component: TasksListPage
+    path: '',
+    component: TaskListPage
   }
 ];
 
 @NgModule({
   imports: [CommonModule, FormsModule, IonicModule, RouterModule.forChild(routes)],
-  declarations: [TasksListPage]
+  declarations: [TaskListPage]
 })
-export class TasksListPageModule {}
+export class TaskListPageModule {}

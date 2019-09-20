@@ -1,5 +1,4 @@
 import { AuthService } from 'src/app/core/services/auth.service';
-
 import { Injectable } from '@angular/core';
 import {
   ActivatedRouteSnapshot,

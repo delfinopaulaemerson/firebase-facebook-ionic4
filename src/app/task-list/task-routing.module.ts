@@ -4,14 +4,9 @@ import { Routes, RouterModule } from '@angular/router';
 
 export const routes: Routes = [
   {
-    path: ' ',
+    path: '',
     canActivateChild: [AuthGuard],
-    children: [
-      {
-        path: ' ',
-        loadChildren: './pages/task-list/tasks-list.module#TasksListPageModule'
-      }
-    ]
+    loadChildren: '../task-list/task-list.module#TaskListPageModule'
   }
 ];
 
@@ -19,4 +14,4 @@ export const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class TasksRoutingModule {}
+export class TaskRoutingModule {}
