@@ -1,10 +1,9 @@
 import { OverlayService } from './../core/services/overlay.service';
 import { Task } from './../../model/task.model';
-import { NavController, AlertController } from '@ionic/angular';
+import { NavController, AlertController, ToastController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { TaskService } from '../core/services/task.service';
-import { async } from '@angular/core/testing';
 
 @Component({
   selector: 'app-task-list',
@@ -15,11 +14,13 @@ export class TaskListPage implements OnInit {
   tasks$: Observable<any[]>;
   tasks: Task[];
   idDocument: string;
+  toast: any;
   constructor(
     private navControler: NavController,
     private taskservice: TaskService,
     private navCtrl: NavController,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private toastController: ToastController
   ) {}
 
   ngOnInit() {
@@ -53,6 +54,21 @@ export class TaskListPage implements OnInit {
       ]
     });
     alert.present();
+  }
+  onDone(task: Task) {
+    this.toast = this.toastController
+      .create({
+        message: 'Tarefa foi Atualizada!',
+        duration: 2000
+      })
+      .then(toastData => {
+        console.log(toastData);
+        toastData.present();
+      });
+    const taskToUpdate = { ...task, done: !task.done };
+    this.idDocument = this.taskservice.getIdDocumentTaskLocalStorage(task.id);
+    this.taskservice.update(this.idDocument, taskToUpdate);
+    this.toast = this.toastController.dismiss();
   }
 
   onSave() {
