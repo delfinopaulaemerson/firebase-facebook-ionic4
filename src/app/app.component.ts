@@ -1,3 +1,4 @@
+import { AuthService } from './core/services/auth.service';
 import { Component } from '@angular/core';
 
 import { Platform } from '@ionic/angular';
@@ -11,7 +12,9 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 })
 export class AppComponent {
   pages: { url: string; direction: string; icon: string; text: string }[];
+  user: firebase.User;
   constructor(
+    private authservice: AuthService,
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar
@@ -24,6 +27,9 @@ export class AppComponent {
       { url: '/task-list', direction: 'back', icon: 'checkmark', text: 'Tasks' },
       { url: '/task-save', direction: 'forward', icon: 'add', text: 'new Task' }
     ];
+    this.authservice.authState$.subscribe(user => {
+      this.user = user;
+    });
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
