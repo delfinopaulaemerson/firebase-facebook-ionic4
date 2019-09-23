@@ -9,6 +9,8 @@
     <app-task-item
       *ngFor="let task of tasks"
       [task]="task"
+      (update)="onUpdate(task);"
+      (delete)="onDelete(task);"
     >
     </app-task-item>
   </ion-list>

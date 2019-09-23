@@ -6,7 +6,8 @@ export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', loadChildren: '../login/auth.module#AuthModule' },
   { path: 'task-list', loadChildren: './task-list/task.module#TaskModule', canLoad: [AuthGuard] },
-  { path: 'task-save', loadChildren: './task-save/task-save.module#TaskSavePageModule' }
+  { path: 'task-save', loadChildren: './task-save/task-save.module#TaskSavePageModule' },
+  { path: 'edit/:id', loadChildren: './task-save/task-save.module#TaskSavePageModule' }
 ];
 
 @NgModule({
