@@ -8,7 +8,8 @@ import {
 } from '@angular/fire/firestore';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { Injectable } from '@angular/core';
-import { Observable, observable } from 'rxjs';
+import { Observable } from 'rxjs';
+import { firestore } from 'firebase';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,12 @@ export class TaskService {
   private task: Task;
 
   constructor(private afs: AngularFirestore, private authservice: AuthService) {
-    this.taskCollection = this.afs.collection<Task>('tasks');
+    this.taskCollection = this.afs.collection<Task>(
+      'tasks',
+      (ref: firestore.CollectionReference) => {
+        return ref.orderBy('title', 'asc');
+      }
+    );
   }
 
   addTask(task: Task): Promise<DocumentReference> {

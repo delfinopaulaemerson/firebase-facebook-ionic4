@@ -20,11 +20,16 @@ export class TaskListPage implements OnInit {
     private taskservice: TaskService,
     private navCtrl: NavController,
     private alertCtrl: AlertController,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private overlay: OverlayService
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
+    const loading = await this.overlay.loading({
+      message: 'List...'
+    });
     this.tasks$ = this.taskservice.getCollection$();
+    loading.dismiss();
   }
   onUpdate(task: Task) {
     this.idDocument = this.taskservice.getIdDocumentTaskLocalStorage(task.id);
